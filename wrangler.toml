@@ -5,4 +5,4 @@ pages_build_output_dir = "public"
 [[d1_databases]]
 binding = "DB"
 database_name = "coupleconnect-db"
-database_id = "REPLACE_WITH_YOUR_DATABASE_ID"
+database_id = "713d60fd-b501-4e27-9820-d7a967fb11e7"
