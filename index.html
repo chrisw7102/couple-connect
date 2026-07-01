@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoupleConnect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B1B2F;
+    --cream:#FFF8F0;
+    --coral:#FF6F59;
+    --gold:#E8B86D;
+    --rose:#D88C9A;
+    --line:rgba(27,27,47,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--cream);
+    background-image:radial-gradient(circle at 15% 10%, rgba(232,184,109,0.25), transparent 45%),
+                      radial-gradient(circle at 85% 90%, rgba(216,140,154,0.25), transparent 45%);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    padding:24px;
+  }
+  .card{
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:28px;
+    padding:40px 36px;
+    box-shadow:0 24px 60px -20px rgba(27,27,47,0.25);
+  }
+  .mark{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:6px;
+  }
+  .mark .dot{
+    width:10px;height:10px;border-radius:50%;background:var(--coral);
+  }
+  .mark .thread{
+    width:28px;height:1px;background:var(--line);
+  }
+  .mark .dot.rose{background:var(--rose);}
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:30px;
+    text-align:center;
+    margin:8px 0 4px;
+    letter-spacing:-0.01em;
+  }
+  p.tag{
+    text-align:center;
+    color:rgba(27,27,47,0.6);
+    font-size:14px;
+    margin:0 0 28px;
+  }
+  .tabs{
+    display:flex;
+    background:var(--cream);
+    border-radius:14px;
+    padding:4px;
+    margin-bottom:24px;
+  }
+  .tabs button{
+    flex:1;
+    padding:10px;
+    border:none;
+    background:transparent;
+    border-radius:11px;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    color:rgba(27,27,47,0.55);
+    cursor:pointer;
+  }
+  .tabs button.active{
+    background:#fff;
+    color:var(--ink);
+    box-shadow:0 2px 8px rgba(27,27,47,0.08);
+  }
+  form{display:none;flex-direction:column;gap:14px;}
+  form.active{display:flex;}
+  label{
+    font-size:13px;
+    font-weight:600;
+    color:rgba(27,27,47,0.7);
+    margin-bottom:-8px;
+  }
+  input{
+    padding:13px 14px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    font-size:15px;
+    font-family:'Inter',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+  }
+  input:focus{
+    outline:2px solid var(--coral);
+    outline-offset:1px;
+  }
+  button.submit{
+    margin-top:8px;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    background:var(--coral);
+    color:#fff;
+    font-weight:600;
+    font-size:15px;
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  button.submit:active{transform:scale(.98);}
+  button.submit:disabled{opacity:0.6;cursor:default;}
+  .error{
+    background:rgba(255,111,89,0.12);
+    color:#B8401F;
+    padding:10px 12px;
+    border-radius:10px;
+    font-size:13px;
+    display:none;
+  }
+  .error.show{display:block;}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="mark">
+    <span class="dot"></span><span class="thread"></span><span class="dot rose"></span>
+  </div>
+  <h1>CoupleConnect</h1>
+  <p class="tag">One space, two people, every day.</p>
+
+  <div class="tabs">
+    <button id="tab-login" class="active">Log in</button>
+    <button id="tab-register">Create account</button>
+  </div>
+
+  <div class="error" id="error"></div>
+
+  <form id="form-login" class="active">
+    <label for="login-email">Email</label>
+    <input id="login-email" type="email" autocomplete="email" required>
+    <label for="login-password">Password</label>
+    <input id="login-password" type="password" autocomplete="current-password" required>
+    <button class="submit" type="submit">Log in</button>
+  </form>
+
+  <form id="form-register">
+    <label for="reg-name">Your name</label>
+    <input id="reg-name" type="text" autocomplete="name" required>
+    <label for="reg-email">Email</label>
+    <input id="reg-email" type="email" autocomplete="email" required>
+    <label for="reg-password">Password</label>
+    <input id="reg-password" type="password" autocomplete="new-password" minlength="8" required>
+    <button class="submit" type="submit">Create account</button>
+  </form>
+</div>
+
+<script>
+const tabLogin = document.getElementById('tab-login');
+const tabRegister = document.getElementById('tab-register');
+const formLogin = document.getElementById('form-login');
+const formRegister = document.getElementById('form-register');
+const errorBox = document.getElementById('error');
+
+function showTab(which){
+  const isLogin = which === 'login';
+  tabLogin.classList.toggle('active', isLogin);
+  tabRegister.classList.toggle('active', !isLogin);
+  formLogin.classList.toggle('active', isLogin);
+  formRegister.classList.toggle('active', !isLogin);
+  errorBox.classList.remove('show');
+}
+tabLogin.addEventListener('click', () => showTab('login'));
+tabRegister.addEventListener('click', () => showTab('register'));
+
+function showError(msg){
+  errorBox.textContent = msg;
+  errorBox.classList.add('show');
+}
+
+async function handleSubmit(url, payload, btn){
+  btn.disabled = true;
+  errorBox.classList.remove('show');
+  try{
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if(!res.ok){
+      showError(data.error || 'Something went wrong. Try again.');
+      btn.disabled = false;
+      return;
+    }
+    window.location.href = '/dashboard.html';
+  }catch(err){
+    showError('Could not reach the server. Check your connection.');
+    btn.disabled = false;
+  }
+}
+
+formLogin.addEventListener('submit', e => {
+  e.preventDefault();
+  const btn = formLogin.querySelector('button.submit');
+  handleSubmit('/api/auth/login', {
+    email: document.getElementById('login-email').value,
+    password: document.getElementById('login-password').value
+  }, btn);
+});
+
+formRegister.addEventListener('submit', e => {
+  e.preventDefault();
+  const btn = formRegister.querySelector('button.submit');
+  handleSubmit('/api/auth/register', {
+    name: document.getElementById('reg-name').value,
+    email: document.getElementById('reg-email').value,
+    password: document.getElementById('reg-password').value
+  }, btn);
+});
+
+// If already logged in, skip straight to dashboard
+fetch('/api/auth/me').then(r => {
+  if(r.ok) window.location.href = '/dashboard.html';
+});
+</script>
+
+</body>
+</html>
